@@ -1,6 +1,6 @@
 # PROFIL-PICTURE
 
-![profil-picture](https://github.com/BaibaLucas/luxury-cars/blob/main/src/public/img/illu.png "presentation Luxury-Cars")
+![profil-picture](https://github.com/BaibaLucas/ProfilPicture/blob/main/src/public/img/illu.png "presentation Luxury-Cars")
 
 ## About The project
 
