@@ -37,7 +37,18 @@ pool.getConnection((err, connection) =>{
 
 
 app.get('', (req, res) => {
-  res.render('index');
+  pool.getConnection((err, connection) => {
+    if(err) throw err ;
+    console.log('Connected!');
+
+    connection.query('SELECT * FROM user WHERE id = "1"', (err, rows) => {
+      // Once done, release connection
+      connection.release();
+      if(!err){
+        res.render('index', { rows });
+      }
+    });
+  });
 });
 
 app.post('', (req, res) => {
@@ -50,7 +61,7 @@ app.post('', (req, res) => {
 
   // name of the input is sampleFile
   sampleFile = req.files.sampleFile;
-  uploadPath = __dirname + '/upload/' + sampleFile.name;
+  uploadPath = __dirname + '/upload/' + `userpic.jpeg`;
 
 
   console.log(sampleFile);
@@ -59,7 +70,25 @@ app.post('', (req, res) => {
   sampleFile.mv(uploadPath, function(err) {
     if(err) return res.status(500).send(err);
 
-    res.send('File uploaded!');
+    pool.getConnection((err, connection) => {
+      if(err) throw err ;
+      console.log('Connected!');
+  
+      connection.query('UPDATE user SET profile_image = ? WHERE id = "1"',['userpic.jpeg'], (err, rows) => {
+        // Once done, release connection
+        connection.release();
+
+        if(!err){
+          res.redirect('/');
+        } else {
+          console.log(err);
+        }
+
+      });
+    });
+
+
+    // res.send('File uploaded!');
 
   });
 
