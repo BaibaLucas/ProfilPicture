@@ -1,8 +1,12 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
+const fileUpload = require('express-fileupload');
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// default option
+app.use(fileUpload());
 
 // Templating engine
 app.engine('hbs', exphbs({ extname: '.hbs' }));
