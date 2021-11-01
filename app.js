@@ -1,9 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const exphbs = require('express-handlebars');
 const fileUpload = require('express-fileupload');
+const mysql = require('mysql2');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 // default option
 app.use(fileUpload());
@@ -15,6 +17,23 @@ app.use(express.static('upload'));
 // Templating engine
 app.engine('hbs', exphbs({ extname: '.hbs' }));
 app.set('view engine', 'hbs');
+
+
+// Connection Pool DB (We can secure with .env for futur)
+// https://stackoverflow.com/questions/50093144/mysql-8-0-client-does-not-support-authentication-protocol-requested-by-server for mysql2*
+
+const pool = mysql.createPool({
+  connectionLimit : 10,
+  host : process.env.HOST,
+  user : process.env.USR,
+  password : process.env.PASSWORD,
+  database : process.env.DB
+});
+
+pool.getConnection((err, connection) =>{
+  if(err) throw err ;
+  console.log('Connected!');
+});
 
 
 app.get('', (req, res) => {
